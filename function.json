@@ -1,0 +1,95 @@
+{
+  "type": "scalar.function",
+  "description": "Keyword-based Relevance Scoring. Discover how relevant a piece of content is to specific keywords.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "keywords": {
+        "type": "array",
+        "description": "Keywords to evaluate relevance against.",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "description": "A keyword to evaluate relevance against."
+        }
+      },
+      "content": {
+        "anyOf": [
+          {
+            "type": "string",
+            "description": "Text content to be evaluated for relevance."
+          },
+          {
+            "type": "image",
+            "description": "Image content to be evaluated for relevance."
+          },
+          {
+            "type": "video",
+            "description": "Video content to be evaluated for relevance."
+          },
+          {
+            "type": "audio",
+            "description": "Audio content to be evaluated for relevance."
+          },
+          {
+            "type": "file",
+            "description": "File content to be evaluated for relevance."
+          },
+          {
+            "type": "array",
+            "description": "Array of content pieces to be evaluated for relevance.",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "description": "Text content to be evaluated for relevance."
+                },
+                {
+                  "type": "image",
+                  "description": "Image content to be evaluated for relevance."
+                },
+                {
+                  "type": "video",
+                  "description": "Video content to be evaluated for relevance."
+                },
+                {
+                  "type": "audio",
+                  "description": "Audio content to be evaluated for relevance."
+                },
+                {
+                  "type": "file",
+                  "description": "File content to be evaluated for relevance."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "required": ["keywords", "content"]
+  },
+  "tasks": [
+    {
+      "type": "scalar.function",
+      "owner": "WiggidyW",
+      "repository": "keyword-relevance-joined",
+      "commit": "5001c56dcf78c60ec734b52d9dcc914e78aa8e76",
+      "input": {
+        "$jmespath": "input"
+      }
+    },
+    {
+      "type": "scalar.function",
+      "owner": "WiggidyW",
+      "repository": "keyword-relevance-split",
+      "commit": "27554600215f296bb64acdb8e522f5ccd69011d6",
+      "input": {
+        "$jmespath": "input"
+      }
+    }
+  ],
+  "output": {
+    "$jmespath": "avg(tasks[].output)"
+  }
+}

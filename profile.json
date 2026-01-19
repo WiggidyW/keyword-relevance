@@ -1,0 +1,15 @@
+{
+  "description": "The default profile for `WiggidyW/keyword-relevance`. Supports multi-modal content.",
+  "tasks": [
+    {
+      "owner": "WiggidyW",
+      "repository": "keyword-relevance-joined",
+      "commit": "5001c56dcf78c60ec734b52d9dcc914e78aa8e76"
+    },
+    {
+      "owner": "WiggidyW",
+      "repository": "keyword-relevance-split",
+      "commit": "27554600215f296bb64acdb8e522f5ccd69011d6"
+    }
+  ]
+}
