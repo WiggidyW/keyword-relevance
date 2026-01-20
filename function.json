@@ -90,6 +90,6 @@
     }
   ],
   "output": {
-    "$jmespath": "avg(tasks[].output)"
+    "$jmespath": "avg(tasks)"
   }
 }
