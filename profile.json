@@ -4,12 +4,12 @@
     {
       "owner": "WiggidyW",
       "repository": "keyword-relevance-joined",
-      "commit": "5001c56dcf78c60ec734b52d9dcc914e78aa8e76"
+      "commit": "2c67d11e9b16377abd62be7380146cb0075b9312"
     },
     {
       "owner": "WiggidyW",
       "repository": "keyword-relevance-split",
-      "commit": "27554600215f296bb64acdb8e522f5ccd69011d6"
+      "commit": "e1a8522120616d184ab9c373ac0fba3d181417db"
     }
   ]
 }
