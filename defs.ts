@@ -3,91 +3,134 @@ import { ExampleInput } from "./example_input";
 
 export const Function: Functions.RemoteFunction = {
   type: "scalar.function",
-  input_maps: null,
-  description: "Placeholder function.",
-  changelog: null,
+  description:
+    "Keyword-based Relevance Scoring. Discover how relevant a piece of content is to specific keywords.",
   input_schema: {
-    type: "integer",
+    type: "object",
+    properties: {
+      keywords: {
+        type: "array",
+        description: "Keywords to evaluate relevance against.",
+        minItems: 1,
+        items: {
+          type: "string",
+          description: "A keyword to evaluate relevance against.",
+        },
+      },
+      content: {
+        anyOf: [
+          {
+            type: "string",
+            description: "Text content to be evaluated for relevance.",
+          },
+          {
+            type: "image",
+            description: "Image content to be evaluated for relevance.",
+          },
+          {
+            type: "video",
+            description: "Video content to be evaluated for relevance.",
+          },
+          {
+            type: "audio",
+            description: "Audio content to be evaluated for relevance.",
+          },
+          {
+            type: "file",
+            description: "File content to be evaluated for relevance.",
+          },
+          {
+            type: "array",
+            description:
+              "Array of content pieces to be evaluated for relevance.",
+            minItems: 1,
+            items: {
+              anyOf: [
+                {
+                  type: "string",
+                  description: "Text content to be evaluated for relevance.",
+                },
+                {
+                  type: "image",
+                  description: "Image content to be evaluated for relevance.",
+                },
+                {
+                  type: "video",
+                  description: "Video content to be evaluated for relevance.",
+                },
+                {
+                  type: "audio",
+                  description: "Audio content to be evaluated for relevance.",
+                },
+                {
+                  type: "file",
+                  description: "File content to be evaluated for relevance.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    required: ["keywords", "content"],
   },
   tasks: [
     {
-      type: "vector.completion",
-      skip: null,
-      map: null,
-      messages: [
-        {
-          role: "user",
-          content: {
-            $jmespath:
-              "join('',['How much do you like the number ',to_string(input),'?'])",
-          },
-        },
-      ],
-      tools: null,
-      responses: [
-        {
-          $jmespath:
-            "join('',['I REALLY LOVE the number ',to_string(input),'!'])",
-        },
-        {
-          $jmespath: "join('',['Meh, ',to_string(input),' is okay I guess.'])",
-        },
-        {
-          $jmespath: "join('',['I HATE the number ',to_string(input),'!'])",
-        },
-      ],
+      type: "scalar.function",
+      owner: "WiggidyW",
+      repository: "keyword-relevance-joined",
+      commit: "e2aea8b8e60e1afd5449715c23899e67a7f4810e",
+      input: {
+        $jmespath: "input",
+      },
+    },
+    {
+      type: "scalar.function",
+      owner: "WiggidyW",
+      repository: "keyword-relevance-split",
+      commit: "a29043a474285c6d85d51e2cb0505e0ea2245b21",
+      input: {
+        $jmespath: "input",
+      },
     },
   ],
   output: {
-    $jmespath: "add(tasks[0].scores[0],multiply(tasks[0].scores[1],`0.5`))",
+    $jmespath: "avg(tasks)",
   },
 };
 
 export const Profile: Functions.RemoteProfile = {
-  description: "Placeholder profile.",
-  changelog: null,
+  description:
+    "The default profile for `WiggidyW/keyword-relevance`. Supports multi-modal content.",
   tasks: [
     {
-      ensemble: {
-        llms: [
-          {
-            model: "openai/gpt-4.1-nano",
-            output_mode: "json_schema",
-          },
-          {
-            model: "google/gemini-2.5-flash-lite",
-            output_mode: "json_schema",
-          },
-          {
-            model: "x-ai/grok-4.1-fast",
-            output_mode: "json_schema",
-            reasoning: {
-              enabled: false,
-            },
-          },
-          {
-            model: "openai/gpt-4o-mini",
-            output_mode: "json_schema",
-            top_logprobs: 20,
-          },
-          {
-            model: "deepseek/deepseek-v3.2",
-            output_mode: "instruction",
-            top_logprobs: 20,
-          },
-        ],
-      },
-      profile: [1.0, 1.0, 1.0, 1.0, 1.0],
+      owner: "WiggidyW",
+      repository: "keyword-relevance-joined",
+      commit: "e2aea8b8e60e1afd5449715c23899e67a7f4810e",
+    },
+    {
+      owner: "WiggidyW",
+      repository: "keyword-relevance-split",
+      commit: "a29043a474285c6d85d51e2cb0505e0ea2245b21",
     },
   ],
 };
 
 export const ExampleInputs: ExampleInput[] = [
   {
-    value: 5,
+    value: {
+      keywords: ["machine learning", "neural networks", "AI"],
+      content:
+        "Deep learning has revolutionized computer vision through convolutional neural networks. These sophisticated algorithms can now identify objects in images with superhuman accuracy, powering everything from autonomous vehicles to medical diagnostics.",
+    },
     compiledTasks: [
       {
-        type: "vector.completion",
+        type: "scalar.function",
+        skipped: false,
+        mapped: null,
+      },
+      {
+        type: "scalar.function",
         skipped: false,
         mapped: null,
       },
@@ -95,10 +138,19 @@ export const ExampleInputs: ExampleInput[] = [
     outputLength: null,
   },
   {
-    value: 10,
+    value: {
+      keywords: ["cooking", "italian cuisine"],
+      content:
+        "yo so basically u gotta boil the pasta til its al dente right?? then u toss it w/ some olive oil garlic n parmesan cheese... chefs kiss fr fr",
+    },
     compiledTasks: [
       {
-        type: "vector.completion",
+        type: "scalar.function",
+        skipped: false,
+        mapped: null,
+      },
+      {
+        type: "scalar.function",
         skipped: false,
         mapped: null,
       },
@@ -106,10 +158,19 @@ export const ExampleInputs: ExampleInput[] = [
     outputLength: null,
   },
   {
-    value: -3,
+    value: {
+      keywords: ["quantum physics", "Schrödinger"],
+      content:
+        "THE CAT IS BOTH ALIVE AND DEAD UNTIL YOU OPEN THE BOX!!! This is the fundamental paradox that Erwin Schrödinger proposed in 1935 to illustrate the absurdity of quantum superposition when applied to macroscopic objects.",
+    },
     compiledTasks: [
       {
-        type: "vector.completion",
+        type: "scalar.function",
+        skipped: false,
+        mapped: null,
+      },
+      {
+        type: "scalar.function",
         skipped: false,
         mapped: null,
       },
@@ -117,10 +178,19 @@ export const ExampleInputs: ExampleInput[] = [
     outputLength: null,
   },
   {
-    value: 21,
+    value: {
+      keywords: ["gardening", "sustainable living"],
+      content:
+        "My grandmother always said that the secret to beautiful roses lies in coffee grounds and eggshells. She would sprinkle them around the base of each bush every Sunday morning after breakfast.",
+    },
     compiledTasks: [
       {
-        type: "vector.completion",
+        type: "scalar.function",
+        skipped: false,
+        mapped: null,
+      },
+      {
+        type: "scalar.function",
         skipped: false,
         mapped: null,
       },
@@ -128,10 +198,19 @@ export const ExampleInputs: ExampleInput[] = [
     outputLength: null,
   },
   {
-    value: 0,
+    value: {
+      keywords: ["cryptocurrency", "blockchain"],
+      content:
+        "pursuant to section 4.2.1 of the whitepaper, all transactions shall be verified through a distributed consensus mechanism utilizing proof-of-stake validation protocols as specified in appendix c",
+    },
     compiledTasks: [
       {
-        type: "vector.completion",
+        type: "scalar.function",
+        skipped: false,
+        mapped: null,
+      },
+      {
+        type: "scalar.function",
         skipped: false,
         mapped: null,
       },
@@ -139,10 +218,19 @@ export const ExampleInputs: ExampleInput[] = [
     outputLength: null,
   },
   {
-    value: -7,
+    value: {
+      keywords: ["fitness", "weight loss", "health"],
+      content:
+        "ATTENTION!! 🔥🔥 Transform ur body in just 30 days with this ONE WEIRD TRICK doctors dont want u 2 know about!! Click here 4 more info!!!",
+    },
     compiledTasks: [
       {
-        type: "vector.completion",
+        type: "scalar.function",
+        skipped: false,
+        mapped: null,
+      },
+      {
+        type: "scalar.function",
         skipped: false,
         mapped: null,
       },
@@ -150,10 +238,19 @@ export const ExampleInputs: ExampleInput[] = [
     outputLength: null,
   },
   {
-    value: 12154235,
+    value: {
+      keywords: ["Renaissance", "art history"],
+      content:
+        "Michelangelo di Lodovico Buonarroti Simoni (1475-1564) spent approximately four years painting the Sistine Chapel ceiling. The masterwork contains over 300 figures and covers roughly 12,000 square feet.",
+    },
     compiledTasks: [
       {
-        type: "vector.completion",
+        type: "scalar.function",
+        skipped: false,
+        mapped: null,
+      },
+      {
+        type: "scalar.function",
         skipped: false,
         mapped: null,
       },
@@ -161,10 +258,19 @@ export const ExampleInputs: ExampleInput[] = [
     outputLength: null,
   },
   {
-    value: -4636,
+    value: {
+      keywords: ["exploration"],
+      content:
+        "lmaooo imagine thinking the moon landing was real 😂😂 wake up sheeple the shadows dont even match up in those photos",
+    },
     compiledTasks: [
       {
-        type: "vector.completion",
+        type: "scalar.function",
+        skipped: false,
+        mapped: null,
+      },
+      {
+        type: "scalar.function",
         skipped: false,
         mapped: null,
       },
@@ -172,10 +278,19 @@ export const ExampleInputs: ExampleInput[] = [
     outputLength: null,
   },
   {
-    value: 989898,
+    value: {
+      keywords: ["poetry", "romanticism", "nature"],
+      content:
+        "I wandered lonely as a cloud / That floats on high o'er vales and hills, / When all at once I saw a crowd, / A host, of golden daffodils",
+    },
     compiledTasks: [
       {
-        type: "vector.completion",
+        type: "scalar.function",
+        skipped: false,
+        mapped: null,
+      },
+      {
+        type: "scalar.function",
         skipped: false,
         mapped: null,
       },
@@ -183,10 +298,19 @@ export const ExampleInputs: ExampleInput[] = [
     outputLength: null,
   },
   {
-    value: 42,
+    value: {
+      keywords: ["plumbing", "home repair", "DIY"],
+      content:
+        "Step 1: Turn off the main water supply. Step 2: Place a bucket beneath the P-trap. Step 3: Unscrew the slip nuts counterclockwise. Step 4: Remove debris and reassemble. WARNING: Do not overtighten fittings.",
+    },
     compiledTasks: [
       {
-        type: "vector.completion",
+        type: "scalar.function",
+        skipped: false,
+        mapped: null,
+      },
+      {
+        type: "scalar.function",
         skipped: false,
         mapped: null,
       },
