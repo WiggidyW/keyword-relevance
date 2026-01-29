@@ -79,7 +79,7 @@ export const Function: Functions.RemoteFunction = {
       type: "scalar.function",
       owner: "WiggidyW",
       repository: "keyword-relevance-joined",
-      commit: "e2aea8b8e60e1afd5449715c23899e67a7f4810e",
+      commit: "7033c63736294af2cf1e3a4b54963a24dc28e5d2",
       input: {
         $jmespath: "input",
       },
@@ -88,7 +88,7 @@ export const Function: Functions.RemoteFunction = {
       type: "scalar.function",
       owner: "WiggidyW",
       repository: "keyword-relevance-split",
-      commit: "a29043a474285c6d85d51e2cb0505e0ea2245b21",
+      commit: "17bc3d7703c3fa8ac576910e302d64e63225bb0c",
       input: {
         $jmespath: "input",
       },
@@ -106,12 +106,12 @@ export const Profile: Functions.RemoteProfile = {
     {
       owner: "WiggidyW",
       repository: "keyword-relevance-joined",
-      commit: "e2aea8b8e60e1afd5449715c23899e67a7f4810e",
+      commit: "7033c63736294af2cf1e3a4b54963a24dc28e5d2",
     },
     {
       owner: "WiggidyW",
       repository: "keyword-relevance-split",
-      commit: "a29043a474285c6d85d51e2cb0505e0ea2245b21",
+      commit: "17bc3d7703c3fa8ac576910e302d64e63225bb0c",
     },
   ],
 };
